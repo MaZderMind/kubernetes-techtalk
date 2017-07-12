@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: chat
+  labels:
+    app: chat
+  namespace: tcpchat
+
+spec:
+  selector:
+    app: chatserver
+
+  type: NodePort
+
+  ports:
+    - name: chat
+      port: 5000
+      protocol: TCP
+      nodePort: 32000

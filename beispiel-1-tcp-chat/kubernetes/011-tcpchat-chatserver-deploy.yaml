@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: chatserver
+  name: chatserver
+  namespace: tcpchat
+
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+
+  selector:
+    matchLabels:
+      app: chatserver
+
+  template:
+    metadata:
+      labels:
+        app: chatserver
+
+    spec:
+      containers:
+      - name: chatserver
+        image: mazdermind/chat-server:v1
+        ports:
+        - containerPort: 5000
+          name: chat
+          protocol: TCP
