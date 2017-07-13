@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+  namespace: logger
+
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      labels:
+        app: postgres
+
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:9.6
+        ports:
+        - containerPort: 5432
+          name: postgres
+          protocol: TCP
+
+        env:
+          - name:  DB_HOST
+            value: postgres
+
+          - name:  POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: logger
+                key: db-name
+
+          - name:  POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: logger
+                key: db-user
+
+          - name:  POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: logger
+                key: db-pass
+
+          - name:  PGDATA
+            value: /var/lib/postgresql/data/postgres-9.6
+
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres
+
+      volumes:
+      - name: postgres
+        persistentVolumeClaim:
+          claimName: postgres

@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-web
+  labels:
+    app: app-web
+  namespace: logger
+
+spec:
+  selector:
+    app: app
+
+  ports:
+    - name: web
+      port: 5000
+      protocol: TCP

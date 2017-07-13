@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: app
+  name: app-web
+  namespace: logger
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: logger.mazdermind.de
+    http:
+      paths:
+      - backend:
+          serviceName: app-web
+          servicePort: web
